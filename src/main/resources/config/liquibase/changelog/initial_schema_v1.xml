@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <!-- Changeset for ClientDbConnectionData -->
+    <changeSet id="1" author="your-name">
+        <createTable tableName="client_db_connection_data" >
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="tenant_id" type="UUID">
+            </column>
+            <column name="db_url" type="varchar(255)" />
+            <column name="username" type="varchar(255)" />
+            <column name="password" type="varchar(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Changeset for KeycloakClientConfig -->
+    <changeSet id="2" author="your-name">
+        <createTable tableName="keycloak_client_config">
+            <column name="config_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="id" type="varchar(255)" />
+            <column name="client_id" type="varchar(255)" />
+            <column name="client_secret" type="varchar(255)" />
+            <column name="tenant_id" type="UUID">
+            </column>
+            <column name="realm" type="varchar(255)" />
+            <column name="username" type="varchar(255)" />
+            <column name="password" type="varchar(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Changeset for Tenant -->
+    <changeSet id="3" author="your-name">
+        <createTable tableName="tenant">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="address" type="VARCHAR(255)" />
+            <column name="phone" type="VARCHAR(20)" />
+            <column name="admin_username" type="VARCHAR(255)" />
+            <column name="admin_password" type="VARCHAR(255)" />
+            <column name="admin_email" type="VARCHAR(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="your-name">
+        <addColumn tableName="client_db_connection_data">
+            <column name="tenant_name" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
