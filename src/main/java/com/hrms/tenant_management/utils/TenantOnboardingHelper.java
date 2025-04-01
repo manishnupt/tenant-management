@@ -16,8 +16,6 @@ public class TenantOnboardingHelper {
         Timestamp now = new Timestamp(System.currentTimeMillis()); // Get current timestamp
 
         return Tenant.builder().name(tenantUiRequest.getName())
-                .address(tenantUiRequest.getAddress())
-                .phone(tenantUiRequest.getPhone())
                 .adminEmail(tenantUiRequest.getAdminEmail())
                 .adminUsername(tenantUiRequest.getAdminUsername())
                 .adminPassword(tenantUiRequest.getAdminPassword())

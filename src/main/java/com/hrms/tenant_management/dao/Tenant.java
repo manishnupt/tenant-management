@@ -28,8 +28,6 @@ public class Tenant {
     private UUID id;
     @Column(unique = true)
     private String name;
-    private String address;
-    private String phone;
     private String adminUsername;
     private String adminPassword;
     private String adminEmail;
