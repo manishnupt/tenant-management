@@ -5,6 +5,7 @@ import com.hrms.tenant_management.dao.ClientDbConnectionData;
 import com.hrms.tenant_management.dao.KeycloakClientConfig;
 import com.hrms.tenant_management.dao.Tenant;
 import com.hrms.tenant_management.dto.ClientDbResponse;
+import com.hrms.tenant_management.dto.ModulesRequest;
 import com.hrms.tenant_management.dto.TenantOnboardingUiRequest;
 import com.hrms.tenant_management.dto.TenantUiResponse;
 import com.hrms.tenant_management.repository.CliendDbRepo;
@@ -18,7 +19,9 @@ import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -53,6 +56,12 @@ public class TenantService {
 
     @Value("${spring.datasource.password}")
     private String dbPassword;
+
+    @Value("${admin_service_base_url}")
+    private String adminUrl;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public TenantService(){
         log.info("Tenant service");
@@ -177,8 +186,10 @@ public class TenantService {
         Tenant tenant=validateAndConvertTenantRequest(tenantUiRequest);
         log.info("Request validated,stared the process to save tenant");
         Tenant savedTenant = saveTenant(tenant);
+        List<String> roles =getAllApplicableRoles(tenantUiRequest.getModules());
+        log.info("got roles :{}",roles);
         log.info("Tenant saved,stared the process of keycloak onboarding");
-        String userId=handleKeycloakIntegration(savedTenant);
+        String userId=handleKeycloakIntegration(savedTenant,roles);
         log.info("Tenant onboarding in keycloak complete, onboarded user with id :{}. Starting to setup tenant db",userId);
         Map<String, String> tenantDatabase = createTenantDatabase(savedTenant.getName());
         log.info("tenant db setup complete saving db details to meta");
@@ -189,6 +200,26 @@ public class TenantService {
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
     }
 
+    private List<String> getAllApplicableRoles(List<String> modules) {
+
+        ModulesRequest request = new ModulesRequest(modules);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<ModulesRequest> entity = new HttpEntity<>(request, headers);
+        String url = adminUrl+"/admin/modules/roles";
+
+        ResponseEntity<Set> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                Set.class
+        );
+
+        Set<String> roles = response.getBody();
+        List<String> roleList = new ArrayList<>(roles);
+        return roleList;
+    }
+
     private Tenant validateAndConvertTenantRequest(TenantOnboardingUiRequest tenantUiRequest) {
         if (existsByName(tenantUiRequest.getName())) {
             log.info("tenant name needs to be unique");
@@ -197,7 +228,7 @@ public class TenantService {
         return TenantOnboardingHelper.convertRequestToTenantEntity(tenantUiRequest);
     }
 
-    private String handleKeycloakIntegration(Tenant savedTenant) {
+    private String handleKeycloakIntegration(Tenant savedTenant, List<String> roles) {
         log.info("getting master realm details from db");
         KeycloakClientConfig clientByRealm = keycloakServicev2.getClientByRealm("master");
         log.info("getting admin token for master realm");
@@ -210,9 +241,9 @@ public class TenantService {
         log.info("creating myca-client in the new realm");
         Map<String,String> clientForRealm = keycloakServicev2.createClient(newToken,savedTenant.getName());
         //new code
-        keycloakServicev2.createRoles(token,savedTenant.getName(),Constants.roles);
+        keycloakServicev2.createRoles(token,savedTenant.getName(),roles);
         String groupId = keycloakServicev2.createGroup(token, savedTenant.getName(), "SUPER_ADMIN");
-        keycloakServicev2.assignRolesToGroup(groupId,savedTenant.getName(),token);
+        keycloakServicev2.assignRolesToGroup(groupId,savedTenant.getName(),token,roles);
         // done
         log.info("admin user onboarded to keycloak");
         String userId=keycloakServicev2.onboardKeycloakUser(savedTenant,newToken);

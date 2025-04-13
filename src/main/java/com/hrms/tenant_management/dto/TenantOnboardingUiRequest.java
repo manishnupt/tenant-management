@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+import java.util.List;
 
 
 @Data
@@ -24,4 +25,5 @@ public class TenantOnboardingUiRequest {
     private String industry;
     private String companySize;
     private String companyWebsite;
+    private List<String> modules;
 }

@@ -20,7 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -177,10 +176,10 @@ public class KeycloakServiceV2 {
         return String.valueOf(exchange.getBody());
     }
 
-    public void assignRolesToGroup(String groupId, String realm, String token) {
+    public void assignRolesToGroup(String groupId, String realm, String token, List<String> roles) {
         HttpHeaders headers = createHeaders(token);
         String createGroupUrl = iamServiceBaseUrl + Constants.ASSIGN_GROUP_ROLES +"?groupId=" +URLEncoder.encode(groupId, StandardCharsets.UTF_8)+ "&realmName=" + URLEncoder.encode(realm, StandardCharsets.UTF_8);
-        HttpEntity<List<String>> requestEntity = new HttpEntity<>(Constants.roles, headers);
+        HttpEntity<List<String>> requestEntity = new HttpEntity<>(roles, headers);
         restTemplate.exchange(createGroupUrl, HttpMethod.POST, requestEntity, String.class).toString();
     }
 }
