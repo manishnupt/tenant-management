@@ -88,14 +88,14 @@ public class TenantService {
             throw new TenantOnboardingException(ErrorCodes.DB_SETUP_ERROR,"Error connecting to tenant database", e);
         }
 
-        // Step 3: Run Liquibase Changelog
-        /*try {
+         //Step 3: Run Liquibase Changelog
+        try {
             runLiquibaseChangelog(tenantDbUrl, randomUsername, randomPassword);
         } catch (LiquibaseException | SQLException e) {
             log.error("error executing the liquibase changelog");
             e.printStackTrace();
             throw new TenantOnboardingException(ErrorCodes.LIQUIBASE_ERROR,"Error executing Liquibase changelog", e);
-        }*/
+        }
 
         // Return database connection details
         return createTenantDbResponse(tenantDbName,tenantDbUrl, randomUsername, randomPassword);

@@ -64,7 +64,5 @@ public class TenantController {
                 keycloakConfig
         );
         return ResponseEntity.ok(response);
-
     }
-
 }
