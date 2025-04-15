@@ -3,183 +3,76 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <!-- Changeset for Role -->
-    <changeSet id="1" author="hrms">
-        <createTable tableName="role">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+    <!-- Changeset for ClientDbConnectionData -->
+    <changeSet id="1" author="your-name">
+        <createTable tableName="client_db_connection_data" >
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="module" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="tenant_id" type="UUID">
+            </column>
+            <column name="db_url" type="varchar(255)" />
+            <column name="username" type="varchar(255)" />
+            <column name="password" type="varchar(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 
-    <!-- Changeset for RoleGroup -->
-    <changeSet id="2" author="hrms">
-        <createTable tableName="role_group">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+    <!-- Changeset for KeycloakClientConfig -->
+    <changeSet id="2" author="your-name">
+        <createTable tableName="keycloak_client_config">
+            <column name="config_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
-            <column name="creation_date" type="TIMESTAMP"/>
-            <column name="last_modification_date" type="TIMESTAMP"/>
-        </createTable>
-
-        <createTable tableName="role_group_roles">
-            <column name="role_group_id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column name="id" type="varchar(255)" />
+            <column name="client_id" type="varchar(255)" />
+            <column name="client_secret" type="varchar(255)" />
+            <column name="tenant_id" type="UUID">
             </column>
-            <column name="role_id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column name="realm" type="varchar(255)" />
+            <column name="username" type="varchar(255)" />
+            <column name="password" type="varchar(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
             </column>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="role_group_roles"
-                                 baseColumnNames="role_group_id"
-                                 constraintName="fk_role_group"
-                                 referencedTableName="role_group"
-                                 referencedColumnNames="id"/>
-
-        <addForeignKeyConstraint baseTableName="role_group_roles"
-                                 baseColumnNames="role_id"
-                                 constraintName="fk_role"
-                                 referencedTableName="role"
-                                 referencedColumnNames="id"/>
-    </changeSet>
-
-    <!-- Changeset for Assets -->
-    <changeSet id="3" author="hrms">
-        <createTable tableName="assets">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
             </column>
-            <column name="asset_code" type="VARCHAR(255)"/>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="type" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(255)"/>
-            <column name="serial_number" type="VARCHAR(255)"/>
-            <column name="retirement_date" type="DATE"/>
-            <column name="is_active" type="BOOLEAN"/>
-            <column name="return_date" type="DATE"/>
-            <column name="return_description" type="VARCHAR(255)"/>
-            <column name="allocation_date" type="DATE"/>
-            <column name="report_date" type="DATE"/>
-            <column name="report_description" type="VARCHAR(255)"/>
-            <column name="assigned_employee_id" type="UUID"/>
-            <column name="created_at" type="DATE"/>
-            <column name="updated_at" type="DATE"/>
         </createTable>
     </changeSet>
 
-    <!-- Changeset for RequestedAsset -->
-    <changeSet id="4" author="hrms">
-        <createTable tableName="requested_asset">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
+    <!-- Changeset for Tenant -->
+    <changeSet id="3" author="your-name">
+        <createTable tableName="tenant">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="employee_id" type="UUID"/>
-            <column name="comment" type="VARCHAR(255)"/>
-            <column name="date" type="DATE"/>
-            <column name="reason" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(255)"/>
-            <column name="is_approved" type="BOOLEAN"/>
-            <column name="created_at" type="DATE"/>
-            <column name="updated_at" type="DATE"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="address" type="VARCHAR(255)" />
+            <column name="phone" type="VARCHAR(20)" />
+            <column name="admin_username" type="VARCHAR(255)" />
+            <column name="admin_password" type="VARCHAR(255)" />
+            <column name="admin_email" type="VARCHAR(255)" />
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
-
-    <!-- Changeset for Employee (new version with employeeId as UUID) -->
-    <changeSet id="5" author="hrms">
-        <createTable tableName="employee">
-            <column name="employee_id" type="VARCHAR(255)">
-                <constraints primaryKey="true" nullable="false" unique="true"/>
-            </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="username" type="VARCHAR(255)"/>
-            <column name="role" type="VARCHAR(255)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="phone" type="VARCHAR(255)"/>
-            <column name="address" type="VARCHAR(255)"/>
-            <column name="city" type="VARCHAR(255)"/>
-            <column name="state" type="VARCHAR(255)"/>
-            <column name="zip_code" type="VARCHAR(255)"/>
-            <column name="country" type="VARCHAR(255)"/>
-            <column name="job_title" type="VARCHAR(255)"/>
-            <column name="project" type="VARCHAR(255)"/>
-            <column name="job_type" type="VARCHAR(255)"/>
-            <column name="job_status" type="VARCHAR(255)"/>
-            <column name="job_description" type="VARCHAR(255)"/>
-        </createTable>
+    <changeSet id="4" author="your-name">
+        <addColumn tableName="client_db_connection_data">
+            <column name="tenant_name" type="varchar(255)" />
+        </addColumn>
     </changeSet>
-
-    <!-- Changeset for LeaveTracker -->
-    <changeSet id="6" author="hrms">
-        <createTable tableName="leave_tracker">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="employee_id" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="start_date" type="DATE"/>
-            <column name="end_date" type="DATE"/>
-            <column name="leave_type" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(255)"/>
-            <column name="reason" type="VARCHAR(255)"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="leave_tracker"
-                                 baseColumnNames="employee_id"
-                                 constraintName="fk_leave_employee"
-                                 referencedTableName="employee"
-                                 referencedColumnNames="employee_id"/>
-    </changeSet>
-
-    <!-- Changeset for Timesheet -->
-    <changeSet id="7" author="hrms">
-        <createTable tableName="timesheet">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="employee_id" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="work_date" type="DATE"/>
-            <column name="clock_in" type="TIME"/>
-            <column name="clock_out" type="TIME"/>
-            <column name="total_hours" type="DOUBLE"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="timesheet"
-                                 baseColumnNames="employee_id"
-                                 constraintName="fk_timesheet_employee"
-                                 referencedTableName="employee"
-                                 referencedColumnNames="employee_id"/>
-    </changeSet>
-
-    <!-- Changeset for LocationLog -->
-    <changeSet id="8" author="hrms">
-        <createTable tableName="location_log">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="employee_id" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="device_ip_address" type="VARCHAR(255)"/>
-            <column name="timestamp" type="TIMESTAMP"/>
-            <column name="log_type" type="VARCHAR(50)"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="location_log"
-                                 baseColumnNames="employee_id"
-                                 constraintName="fk_location_employee"
-                                 referencedTableName="employee"
-                                 referencedColumnNames="employee_id"/>
-    </changeSet>
-
 </databaseChangeLog>
