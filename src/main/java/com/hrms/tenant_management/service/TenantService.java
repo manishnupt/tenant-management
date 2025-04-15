@@ -3,12 +3,14 @@ package com.hrms.tenant_management.service;
 
 import com.hrms.tenant_management.dao.ClientDbConnectionData;
 import com.hrms.tenant_management.dao.KeycloakClientConfig;
+import com.hrms.tenant_management.dao.RoleModuleMapping;
 import com.hrms.tenant_management.dao.Tenant;
 import com.hrms.tenant_management.dto.ClientDbResponse;
 import com.hrms.tenant_management.dto.ModulesRequest;
 import com.hrms.tenant_management.dto.TenantOnboardingUiRequest;
 import com.hrms.tenant_management.dto.TenantUiResponse;
 import com.hrms.tenant_management.repository.CliendDbRepo;
+import com.hrms.tenant_management.repository.RoleModuleMapRepo;
 import com.hrms.tenant_management.repository.TenantRepo;
 import com.hrms.tenant_management.utils.*;
 import com.zaxxer.hikari.HikariDataSource;
@@ -62,6 +64,9 @@ public class TenantService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private RoleModuleMapRepo roleModuleMapRepo;
 
     public TenantService(){
         log.info("Tenant service");
@@ -201,23 +206,7 @@ public class TenantService {
     }
 
     private List<String> getAllApplicableRoles(List<String> modules) {
-
-        ModulesRequest request = new ModulesRequest(modules);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ModulesRequest> entity = new HttpEntity<>(request, headers);
-        String url = adminUrl+"/admin/modules/roles";
-
-        ResponseEntity<Set> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                Set.class
-        );
-
-        Set<String> roles = response.getBody();
-        List<String> roleList = new ArrayList<>(roles);
-        return roleList;
+        return roleModuleMapRepo.findRolesByModules(modules);
     }
 
     private Tenant validateAndConvertTenantRequest(TenantOnboardingUiRequest tenantUiRequest) {

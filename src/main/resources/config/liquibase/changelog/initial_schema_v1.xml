@@ -75,4 +75,118 @@
             <column name="tenant_name" type="varchar(255)" />
         </addColumn>
     </changeSet>
+    <changeSet id="5" author="you">
+        <createTable tableName="role_group_mapping">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="module" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Insert values -->
+    <changeSet id="6" author="you">
+        <insert tableName="role_group_mapping">
+            <column name="role" value="VIEW_NOTICES"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="PUBLISH_NOTICES"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="LEAVE_APPLY"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="LEAVE_APPROVAL"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="TIMESHEET_FILL"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="TIMESHEET_APPROVAL"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="HOLIDAYS_VIEW"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="HOLIDAYS_PUBLISH"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="SALARY_SLIP_VIEW"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="MANAGER_ASSIGNMENT"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="PROFILE_VIEW"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="TEAM_HIERARCHY_VIEW"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="VIEW_MY_ASSIGNED_ASSETS"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="ADD_EMPLOYEE"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="ASSET_REGISTRATION"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="ASSET_ALLOCATION"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="REQUEST_ASSET"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="ASSET_TRACKING"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="VIEW_ALLOCATED_ASSETS"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="REPORT_LOST_DAMAGED_ASSETS"/>
+            <column name="module" value="ASSET_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="SELF_CHECK_IN_AND_CHECKOUT"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="RECRUITMENT_HIRING"/>
+            <column name="module" value="RECRUITMENT_HIRING"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="REPORTS_ANALYTICS"/>
+            <column name="module" value="REPORTS_ANALYTICS"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="COMPLIANCE_SECURITY"/>
+            <column name="module" value="COMPLIANCE_SECURITY"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
