@@ -6,7 +6,6 @@ import com.hrms.tenant_management.dao.KeycloakClientConfig;
 import com.hrms.tenant_management.dao.RoleModuleMapping;
 import com.hrms.tenant_management.dao.Tenant;
 import com.hrms.tenant_management.dto.ClientDbResponse;
-import com.hrms.tenant_management.dto.ModulesRequest;
 import com.hrms.tenant_management.dto.TenantOnboardingUiRequest;
 import com.hrms.tenant_management.dto.TenantUiResponse;
 import com.hrms.tenant_management.repository.CliendDbRepo;
@@ -21,7 +20,6 @@ import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -200,9 +198,43 @@ public class TenantService {
         log.info("tenant db setup complete saving db details to meta");
         saveTenantDatabaseDetails(tenantDatabase,savedTenant.getId(),savedTenant.getName());
         log.info("process started to onboard user to tenant's db");
+        persistRoleToTenantTable(tenantUiRequest.getModules(),tenantDatabase,tenantUiRequest);
         //persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest);
         log.info("tenant onboarded successfully");
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
+    }
+
+    private void persistRoleToTenantTable(List<String> modules, Map<String, String> tenantDatabase, TenantOnboardingUiRequest tenantUiRequest)  {
+        List<RoleModuleMapping> allRolesByModules = getAllRolesByModules(modules);
+        log.info("got {} roles as per modules ",allRolesByModules.size());
+        String insertQuery = Constants.INSERT_ROLE_QUERY;
+        try {
+            Class.forName("org.postgresql.Driver");
+            try (Connection tenantConnection = DriverManager.getConnection(
+                    tenantDatabase.get("url"),
+                    tenantDatabase.get("user"),
+                    tenantDatabase.get("password"));
+                 PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
+
+                for (RoleModuleMapping role : allRolesByModules) {
+                    // Set the parameters for the query
+                    preparedStatement.setString(1, role.getRole());
+                    preparedStatement.setString(2, role.getModule());
+                    preparedStatement.setString(3, role.getDescription());
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    log.info("rows affected:{}",rowsAffected);
+                }
+            }  catch (SQLException e) {
+                e.printStackTrace();
+                throw new TenantOnboardingException(ErrorCodes.DB_INSERT_ERROR, "Error connecting to tenant database or executing query", e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<RoleModuleMapping> getAllRolesByModules(List<String> modules) {
+        return roleModuleMapRepo.getAllRoleByModule(modules);
     }
 
     private List<String> getAllApplicableRoles(List<String> modules) {

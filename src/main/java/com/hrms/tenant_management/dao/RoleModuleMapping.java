@@ -20,5 +20,8 @@ public class RoleModuleMapping {
 
     @Column(name = "module", nullable = false, length = 100)
     private String module;
+
+    @Column(name="description", nullable = false, length = 100 )
+    private String description;
 }
 

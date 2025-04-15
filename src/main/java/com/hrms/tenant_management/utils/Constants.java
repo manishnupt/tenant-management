@@ -26,6 +26,10 @@ public class Constants {
             " email, user_ref_id,user_name,roles, creation_date, last_modification_date) " +
             "VALUES (?, ?, ?, ?, ?, ?);";
 
+    public static final String INSERT_ROLE_QUERY = "INSERT INTO public.roles (" +
+            " role, module,description) " +
+            "VALUES (?, ?, ?);";
+
     public static final List<String> roles = Arrays.asList(
             "EMPLOYEE_MGMT",
             "HIRING_MGMT",

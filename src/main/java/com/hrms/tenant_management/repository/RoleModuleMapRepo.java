@@ -15,4 +15,7 @@ public interface RoleModuleMapRepo extends JpaRepository<RoleModuleMapping,Long>
 
     @Query("SELECT r.role FROM RoleModuleMapping r WHERE r.module IN :modules")
     List<String> findRolesByModules(@Param("modules") List<String> modules);
+
+    @Query("SELECT r FROM RoleModuleMapping r WHERE r.module IN :modules")
+    List<RoleModuleMapping> getAllRoleByModule(List<String> modules);
 }
