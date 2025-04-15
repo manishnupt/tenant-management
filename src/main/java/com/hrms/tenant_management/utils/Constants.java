@@ -26,7 +26,7 @@ public class Constants {
             " email, user_ref_id,user_name,roles, creation_date, last_modification_date) " +
             "VALUES (?, ?, ?, ?, ?, ?);";
 
-    public static final String INSERT_ROLE_QUERY = "INSERT INTO public.roles (" +
+    public static final String INSERT_ROLE_QUERY = "INSERT INTO public.role (" +
             " role, module,description) " +
             "VALUES (?, ?, ?);";
 
