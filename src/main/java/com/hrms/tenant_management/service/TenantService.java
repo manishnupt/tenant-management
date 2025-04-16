@@ -199,9 +199,103 @@ public class TenantService {
         saveTenantDatabaseDetails(tenantDatabase,savedTenant.getId(),savedTenant.getName());
         log.info("process started to onboard user to tenant's db");
         persistRoleToTenantTable(tenantUiRequest.getModules(),tenantDatabase,tenantUiRequest);
+        persistGroupAndAssignRolesToTenantTable(tenantDatabase,"SUPER_ADMIN","group containing all the features your organisation has opted for");
         //persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest);
         log.info("tenant onboarded successfully");
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
+    }
+
+    private void persistGroupAndAssignRolesToTenantTable(Map<String, String> tenantDatabase, String group,String groupDescription) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            try (Connection tenantConnection = DriverManager.getConnection(
+                    tenantDatabase.get("url"),
+                    tenantDatabase.get("user"),
+                    tenantDatabase.get("password"))) {
+
+                // Create transaction to ensure atomicity
+                tenantConnection.setAutoCommit(false);
+
+                try {
+                    // 1. Insert the role group
+                    Long roleGroupId = insertRoleGroup(tenantConnection, group, groupDescription);
+
+                    // 2. Get all roles from the role table
+                    List<Long> roleIds = getAllRoleIds(tenantConnection);
+
+                    // 3. Assign all roles to the role group
+                    assignRolesToGroup(tenantConnection, roleGroupId, roleIds);
+
+                    // Commit the transaction
+                    tenantConnection.commit();
+                    log.info("Successfully created role group '{}' with {} roles assigned", group, roleIds.size());
+                } catch (SQLException e) {
+                    // Rollback in case of error
+                    tenantConnection.rollback();
+                    log.error("Error creating role group. Transaction rolled back.", e);
+                    throw new TenantOnboardingException(ErrorCodes.DB_INSERT_ERROR, "Error creating role group", e);
+                } finally {
+                    tenantConnection.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                log.error("Error connecting to tenant database", e);
+                throw new TenantOnboardingException(ErrorCodes.DB_CONNECTION_ERROR, "Error connecting to tenant database", e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("PostgreSQL driver not found", e);
+        }
+
+    }
+
+    private List<Long> getAllRoleIds(Connection tenantConnection) throws SQLException {
+            List<Long> roleIds = new ArrayList<>();
+            String selectQuery = "SELECT id FROM role";
+
+            try (PreparedStatement preparedStatement = tenantConnection.prepareStatement(selectQuery);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    roleIds.add(resultSet.getLong("id"));
+                }
+            }
+            return roleIds;
+    }
+    private void assignRolesToGroup(Connection connection, Long roleGroupId, List<Long> roleIds) throws SQLException {
+        String insertQuery = "INSERT INTO role_group_roles (role_group_id, role_id) VALUES (?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            for (Long roleId : roleIds) {
+                preparedStatement.setLong(1, roleGroupId);
+                preparedStatement.setLong(2, roleId);
+                preparedStatement.addBatch();
+            }
+
+            int[] batchResults = preparedStatement.executeBatch();
+            log.info("Assigned {} roles to role group {}", batchResults.length, roleGroupId);
+        }
+    }
+
+
+
+    private Long insertRoleGroup(Connection tenantConnection, String group, String groupDescription)throws SQLException  {
+        String insertQuery = "INSERT INTO role_group (name, description, creation_date, last_modification_date) VALUES (?, ?, ?, ?) RETURNING id";
+
+        try (PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, group);
+            preparedStatement.setString(2, groupDescription);
+            LocalDateTime now = LocalDateTime.now();
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(now));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(now));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getLong("id");
+                } else {
+                    throw new SQLException("Failed to retrieve role group id after insertion");
+                }
+            }
+        }
+
     }
 
     private void persistRoleToTenantTable(List<String> modules, Map<String, String> tenantDatabase, TenantOnboardingUiRequest tenantUiRequest)  {

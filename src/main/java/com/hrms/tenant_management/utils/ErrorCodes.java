@@ -23,4 +23,5 @@ public class ErrorCodes {
         public static final int ILLEGAL_ARGUMENTS=1014;
         public static final int MASTER_REALM_SETUP_ERR=1015;
 
+        public static final int DB_CONNECTION_ERROR =1111 ;
 }
