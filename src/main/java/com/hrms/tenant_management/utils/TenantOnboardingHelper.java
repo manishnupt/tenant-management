@@ -43,6 +43,7 @@ public class TenantOnboardingHelper {
                 userName(savedTenant.getAdminUsername()).
                 email(savedTenant.getAdminEmail()).
                 realmName(savedTenant.getName()).
+                temporaryPassword(false).
                 build();
     }
     public static ClientDbConnectionData getClientDbConnectionData(Map<String, String> clientDbConnectionData, UUID tenantId,String tenantName) {

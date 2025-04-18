@@ -14,4 +14,5 @@ public class OnboardKeycloakUserRequest {
     private String email;
     private String userName;
     private String realmName;
+    private boolean temporaryPassword;
 }
