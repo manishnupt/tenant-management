@@ -184,8 +184,8 @@
 
     <changeSet id="9" author="hrms">
         <createTable tableName="policies">
-            <column name="policy_id" type="SERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="policy_id" type="BIGINT"  autoIncrement="true">
+                <constraints primaryKey="true" />
             </column>
             <column name="policy_name" type="VARCHAR(255)">
                 <constraints nullable="false" unique="true"/>
@@ -194,10 +194,10 @@
     </changeSet>
     <changeSet id="10" author="hrms">
         <createTable tableName="policy_attributes">
-            <column name="attribute_id" type="SERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="attribute_id" type="BIGINT"  autoIncrement="true">
+                <constraints primaryKey="true" />
             </column>
-            <column name="policy_id" type="INT">
+            <column name="policy_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="attribute_name" type="VARCHAR(255)">
@@ -215,10 +215,10 @@
 
     <changeSet id="11" author="hrms">
         <createTable tableName="attribute_values">
-            <column name="value_id" type="SERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="value_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
             </column>
-            <column name="attribute_id" type="INT">
+            <column name="attribute_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="attribute_value" type="TEXT">
