@@ -182,4 +182,87 @@
                                  referencedColumnNames="employee_id"/>
     </changeSet>
 
+    <changeSet id="9" author="hrms">
+        <createTable tableName="policies">
+            <column name="policy_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="policy_name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="10" author="hrms">
+        <createTable tableName="policy_attributes">
+            <column name="attribute_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="policy_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="policy_attributes"
+                                 baseColumnNames="policy_id"
+                                 constraintName="fk_policy_attributes_policy"
+                                 referencedTableName="policies"
+                                 referencedColumnNames="policy_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="11" author="hrms">
+        <createTable tableName="attribute_values">
+            <column name="value_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="attribute_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_value" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="attribute_values"
+                                 baseColumnNames="attribute_id"
+                                 constraintName="fk_attribute_values_attribute"
+                                 referencedTableName="policy_attributes"
+                                 referencedColumnNames="attribute_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+    <changeSet id="12" author="hrms">
+        <createTable tableName="action_items">
+            <column name="action_item_id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="policy_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="status" type="VARCHAR(50)" defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="DATE"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="action_items"
+                                 baseColumnNames="policy_id"
+                                 constraintName="fk_action_items_policy"
+                                 referencedTableName="policies"
+                                 referencedColumnNames="policy_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
 </databaseChangeLog>
