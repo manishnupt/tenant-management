@@ -20,6 +20,8 @@ public class TenantOnboardingUiRequest {
     private String adminPassword;
     @NotBlank(message = "admin email cannot be blank")
     private String adminEmail;
+    private String adminFirstName;
+    private String adminLastName;
     @NotBlank(message = "company name cannot be blank")
     private String companyFullName;
     private String industry;

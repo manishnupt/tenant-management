@@ -113,6 +113,9 @@
             <column name="job_type" type="VARCHAR(255)"/>
             <column name="job_status" type="VARCHAR(255)"/>
             <column name="job_description" type="VARCHAR(255)"/>
+            <column name="groupId" type="BIGINT"/>
+            <column name="kc_reference_id" type="VARCHAR(255)"/>
+            <column name="assigned_manager_id" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
 

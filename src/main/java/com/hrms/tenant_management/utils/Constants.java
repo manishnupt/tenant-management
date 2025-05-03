@@ -22,9 +22,9 @@ public class Constants {
     public static final String CREATE_ROLES="/create-roles";
     public static final String BASE_URL_EXTRACT_REGEX="jdbc:postgresql://[^/]+:\\d+";
 
-    public static final String INSERT_USER_QUERY = "INSERT INTO public.users (" +
-            " email, user_ref_id,user_name,roles, creation_date, last_modification_date) " +
-            "VALUES (?, ?, ?, ?, ?, ?);";
+    public static final String INSERT_USER_QUERY = "INSERT INTO public.employee (" +
+            " name, username, email,kc_reference_id) " +
+            "VALUES (?, ?, ?, ?);";
 
     public static final String INSERT_ROLE_QUERY = "INSERT INTO public.role (" +
             " name, module,description) " +

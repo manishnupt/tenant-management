@@ -200,7 +200,7 @@ public class TenantService {
         log.info("process started to onboard user to tenant's db");
         persistRoleToTenantTable(tenantUiRequest.getModules(),tenantDatabase,tenantUiRequest);
         persistGroupAndAssignRolesToTenantTable(tenantDatabase,"SUPER_ADMIN","group containing all the features your organisation has opted for");
-        //persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest);
+        persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest);
         log.info("tenant onboarded successfully");
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
     }
@@ -396,12 +396,12 @@ public class TenantService {
                  PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
 
                 // Set the parameters for the query
-                preparedStatement.setString(1, tenantUiRequest.getAdminEmail()); // email
-                preparedStatement.setString(2, userId); // user_ref_id
-                preparedStatement.setString(3, tenantUiRequest.getAdminUsername()); // user_name
-                preparedStatement.setString(4,"Admin");
-                preparedStatement.setObject(5, LocalDateTime.now()); // created_date
-                preparedStatement.setObject(6, LocalDateTime.now()); // modified_date
+                preparedStatement.setString(1,tenantUiRequest.getAdminFirstName()+ " "+ tenantUiRequest.getAdminLastName()); // email
+                preparedStatement.setString(2,  tenantUiRequest.getAdminUsername()); // user_ref_id
+                preparedStatement.setString(3, tenantUiRequest.getAdminEmail()); // user_name
+                preparedStatement.setString(4,userId);
+               // preparedStatement.setObject(5, LocalDateTime.now()); // created_date
+                //preparedStatement.setObject(6, LocalDateTime.now()); // modified_date
 
                 // Execute the query
                 int rowsAffected = preparedStatement.executeUpdate();
