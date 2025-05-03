@@ -396,10 +396,11 @@ public class TenantService {
                  PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
 
                 // Set the parameters for the query
-                preparedStatement.setString(1,tenantUiRequest.getAdminFirstName()+ " "+ tenantUiRequest.getAdminLastName()); // email
-                preparedStatement.setString(2,  tenantUiRequest.getAdminUsername()); // user_ref_id
-                preparedStatement.setString(3, tenantUiRequest.getAdminEmail()); // user_name
-                preparedStatement.setString(4,userId);
+                preparedStatement.setString(1,UUID.randomUUID().toString());
+                preparedStatement.setString(2,tenantUiRequest.getAdminFirstName()+ " "+ tenantUiRequest.getAdminLastName()); // email
+                preparedStatement.setString(3,  tenantUiRequest.getAdminUsername()); // user_ref_id
+                preparedStatement.setString(4, tenantUiRequest.getAdminEmail()); // user_name
+                preparedStatement.setString(5,userId);
                // preparedStatement.setObject(5, LocalDateTime.now()); // created_date
                 //preparedStatement.setObject(6, LocalDateTime.now()); // modified_date
 
