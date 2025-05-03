@@ -25,6 +25,7 @@
             </column>
             <column name="name" type="VARCHAR(255)"/>
             <column name="description" type="VARCHAR(255)"/>
+            <column name="kc_group_id_ref" type="VARCHAR(255)"/>
             <column name="creation_date" type="TIMESTAMP"/>
             <column name="last_modification_date" type="TIMESTAMP"/>
         </createTable>
