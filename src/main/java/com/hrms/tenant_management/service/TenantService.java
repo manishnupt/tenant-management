@@ -199,13 +199,13 @@ public class TenantService {
         saveTenantDatabaseDetails(tenantDatabase,savedTenant.getId(),savedTenant.getName());
         log.info("process started to onboard user to tenant's db");
         persistRoleToTenantTable(tenantUiRequest.getModules(),tenantDatabase,tenantUiRequest);
-        persistGroupAndAssignRolesToTenantTable(tenantDatabase,"SUPER_ADMIN","group containing all the features your organisation has opted for");
-        persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest);
+        Long groupId = persistGroupAndAssignRolesToTenantTable(tenantDatabase, "SUPER_ADMIN", "group containing all the features your organisation has opted for");
+        persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest,groupId);
         log.info("tenant onboarded successfully");
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
     }
 
-    private void persistGroupAndAssignRolesToTenantTable(Map<String, String> tenantDatabase, String group,String groupDescription) {
+    private Long persistGroupAndAssignRolesToTenantTable(Map<String, String> tenantDatabase, String group,String groupDescription) {
         try {
             Class.forName("org.postgresql.Driver");
             try (Connection tenantConnection = DriverManager.getConnection(
@@ -229,6 +229,7 @@ public class TenantService {
                     // Commit the transaction
                     tenantConnection.commit();
                     log.info("Successfully created role group '{}' with {} roles assigned", group, roleIds.size());
+                    return roleGroupId;
                 } catch (SQLException e) {
                     // Rollback in case of error
                     tenantConnection.rollback();
@@ -384,7 +385,7 @@ public class TenantService {
     }
 
 
-    private void persistUserToTenantDb(String userId, Map<String, String> tenantDatabase, TenantOnboardingUiRequest tenantUiRequest) {
+    private void persistUserToTenantDb(String userId, Map<String, String> tenantDatabase, TenantOnboardingUiRequest tenantUiRequest,Long groupId) {
        // log.info("starting process to ")
         String insertQuery = Constants.INSERT_USER_QUERY;
         try {
@@ -401,6 +402,7 @@ public class TenantService {
                 preparedStatement.setString(3,  tenantUiRequest.getAdminUsername()); // user_ref_id
                 preparedStatement.setString(4, tenantUiRequest.getAdminEmail()); // user_name
                 preparedStatement.setString(5,userId);
+                preparedStatement.setString(6,groupId.toString());
                // preparedStatement.setObject(5, LocalDateTime.now()); // created_date
                 //preparedStatement.setObject(6, LocalDateTime.now()); // modified_date
 
