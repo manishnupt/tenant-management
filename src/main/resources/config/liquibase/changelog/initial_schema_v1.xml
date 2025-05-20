@@ -200,11 +200,6 @@
             <column name="description" value="Assigned user can use the check in/checkout button for timesheet management"/>
         </insert>
         <insert tableName="role_group_mapping">
-            <column name="role" value="SELF_CHECK_IN_AND_CHECKOUT"/>
-            <column name="module" value="EMPLOYEE_MGMT"/>
-            <column name="description" value="Assigned user can use the check in/checkout button for timesheet management"/>
-        </insert>
-        <insert tableName="role_group_mapping">
             <column name="role" value="RECRUITMENT_HIRING"/>
             <column name="module" value="RECRUITMENT_HIRING"/>
             <column name="description" value="demo for hiring"/>
@@ -219,12 +214,24 @@
             <column name="module" value="COMPLIANCE_SECURITY"/>
             <column name="description" value="demo for compliance and security"/>
         </insert>
+    </changeSet>
+
+
+    <changeSet id="8" author="you">
+        <insert tableName="role_group_mapping">
+            <column name="role" value="SELF_CHECK_IN_AND_CHECKOUT"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+            <column name="description" value="Assigned user can use the check in/checkout button for timesheet management"/>
+        </insert>
         <insert tableName="role_group_mapping">
             <column name="role" value="COMPLIANCE_SECURITY"/>
             <column name="module" value="COMPLIANCE_SECURITY"/>
             <column name="description" value="demo for compliance and security"/>
         </insert>
+
     </changeSet>
+
+
 
 
 </databaseChangeLog>
