@@ -189,6 +189,7 @@ public class TenantService {
         Tenant tenant=validateAndConvertTenantRequest(tenantUiRequest);
         log.info("Request validated,stared the process to save tenant");
         Tenant savedTenant = saveTenant(tenant);
+        //tenantUiRequest.getModules().add("GROUP_ROLES_MGMT");
         List<String> roles =getAllApplicableRoles(tenantUiRequest.getModules());
         log.info("got roles :{}",roles);
         log.info("Tenant saved,stared the process of keycloak onboarding");
@@ -397,11 +398,11 @@ public class TenantService {
                  PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
 
                 // Set the parameters for the query
-                preparedStatement.setString(1,UUID.randomUUID().toString());
+                preparedStatement.setString(1,userId);
                 preparedStatement.setString(2,tenantUiRequest.getAdminFirstName()+ " "+ tenantUiRequest.getAdminLastName()); // email
                 preparedStatement.setString(3,  tenantUiRequest.getAdminUsername()); // user_ref_id
                 preparedStatement.setString(4, tenantUiRequest.getAdminEmail()); // user_name
-                preparedStatement.setString(5,userId);
+                //preparedStatement.setString(5,userId);
                 preparedStatement.setString(6,groupId.toString());
                // preparedStatement.setObject(5, LocalDateTime.now()); // created_date
                 //preparedStatement.setObject(6, LocalDateTime.now()); // modified_date

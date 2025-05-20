@@ -200,6 +200,11 @@
             <column name="description" value="Assigned user can use the check in/checkout button for timesheet management"/>
         </insert>
         <insert tableName="role_group_mapping">
+            <column name="role" value="SELF_CHECK_IN_AND_CHECKOUT"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+            <column name="description" value="Assigned user can use the check in/checkout button for timesheet management"/>
+        </insert>
+        <insert tableName="role_group_mapping">
             <column name="role" value="RECRUITMENT_HIRING"/>
             <column name="module" value="RECRUITMENT_HIRING"/>
             <column name="description" value="demo for hiring"/>
@@ -208,6 +213,11 @@
             <column name="role" value="REPORTS_ANALYTICS"/>
             <column name="module" value="REPORTS_ANALYTICS"/>
             <column name="description" value="demo for analytics and reporting"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="COMPLIANCE_SECURITY"/>
+            <column name="module" value="COMPLIANCE_SECURITY"/>
+            <column name="description" value="demo for compliance and security"/>
         </insert>
         <insert tableName="role_group_mapping">
             <column name="role" value="COMPLIANCE_SECURITY"/>
