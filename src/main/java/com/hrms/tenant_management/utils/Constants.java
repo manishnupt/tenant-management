@@ -6,11 +6,11 @@ import java.util.List;
 public class Constants {
 
 
-    public static final String GET_ADMIN_TOKEN = "/keycloak-token";
-    public static final String CREATE_REALM = "/create-realm";
-    public static final String CREATE_CLIENT = "/create-client";
-    public static final String ONBOARD_KEYCLOAK_USER = "/onboard-first-user";
-    public static final String GRANT_ADMIN_ACCESS = "/grant-super-admin-access";
+    public static final String GET_ADMIN_TOKEN = "/iamcontroller/keycloak-token";
+    public static final String CREATE_REALM = "/iamcontroller/create-realm";
+    public static final String CREATE_CLIENT = "/iamcontroller/create-client";
+    public static final String ONBOARD_KEYCLOAK_USER = "/iamcontroller/onboard-first-user";
+    public static final String GRANT_ADMIN_ACCESS = "/iamcontroller/grant-super-admin-access";
 
     public static final String CREATE_USER = "CREATE USER %s WITH PASSWORD '%s'";
     public static final String GRANT_ACCESS = "GRANT ALL PRIVILEGES ON DATABASE %s TO %s";
@@ -42,6 +42,6 @@ public class Constants {
             "ASSET_REGISTRATION",
             "ASSET_ALLOCATION"
     );
-    public static final String CREATE_GROUP = "/create-group";
-    public static final String ASSIGN_GROUP_ROLES ="/assign-group-roles" ;
+    public static final String CREATE_GROUP = "/iamcontroller/create-group";
+    public static final String ASSIGN_GROUP_ROLES ="/iamcontroller/assign-group-roles" ;
 }
