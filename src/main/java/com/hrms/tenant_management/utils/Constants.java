@@ -19,7 +19,7 @@ public class Constants {
     public static final String GRANT_EXISTING_TABLES = "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO %s";
     public static final String GRANT_FUTURE_TABLES = "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO %s";
     public static final String ORG_POSTGRESQL_DRIVER = "org.postgresql.Driver";
-    public static final String CREATE_ROLES="/create-roles";
+    public static final String CREATE_ROLES="/iamcontroller/create-roles";
     public static final String BASE_URL_EXTRACT_REGEX="jdbc:postgresql://[^/]+:\\d+";
 
     public static final String INSERT_USER_QUERY = "INSERT INTO public.employee (" +
