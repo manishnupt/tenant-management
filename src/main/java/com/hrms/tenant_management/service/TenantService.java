@@ -403,7 +403,7 @@ public class TenantService {
                 preparedStatement.setString(3,  tenantUiRequest.getAdminUsername()); // user_ref_id
                 preparedStatement.setString(4, tenantUiRequest.getAdminEmail()); // user_name
                 //preparedStatement.setString(5,userId);
-                preparedStatement.setString(5,groupId.toString());
+                preparedStatement.setLong(5,groupId);
                // preparedStatement.setObject(5, LocalDateTime.now()); // created_date
                 //preparedStatement.setObject(6, LocalDateTime.now()); // modified_date
 
