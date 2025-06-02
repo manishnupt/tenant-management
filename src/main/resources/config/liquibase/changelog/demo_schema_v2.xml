@@ -93,32 +93,33 @@
         </createTable>
     </changeSet>
 
-    <!-- Changeset for Employee (new version with employeeId as UUID) -->
-    <changeSet id="5" author="hrms">
+    <!-- Changeset for Employee (new version with employee_id as UUID) -->
+    <changeSet id="5" author="yourname">
         <createTable tableName="employee">
-            <column name="employee_id" type="VARCHAR(255)">
+            <column name="employee_id" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="username" type="VARCHAR(255)"/>
-            <column name="role" type="VARCHAR(255)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="phone" type="VARCHAR(255)"/>
-            <column name="address" type="VARCHAR(255)"/>
-            <column name="city" type="VARCHAR(255)"/>
-            <column name="state" type="VARCHAR(255)"/>
-            <column name="zip_code" type="VARCHAR(255)"/>
-            <column name="country" type="VARCHAR(255)"/>
-            <column name="job_title" type="VARCHAR(255)"/>
-            <column name="project" type="VARCHAR(255)"/>
-            <column name="job_type" type="VARCHAR(255)"/>
-            <column name="job_status" type="VARCHAR(255)"/>
-            <column name="job_description" type="VARCHAR(255)"/>
-            <column name="group_id" type="BIGINT"/>
-            <column name="kc_reference_id" type="VARCHAR(255)"/>
-            <column name="assigned_manager_id" type="VARCHAR(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="username" type="varchar(255)"/>
+            <column name="role" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="phone" type="varchar(255)"/>
+            <column name="address" type="varchar(255)"/>
+            <column name="city" type="varchar(255)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="zipCode" type="varchar(255)"/>
+            <column name="country" type="varchar(255)"/>
+            <column name="jobTitle" type="varchar(255)"/>
+            <column name="project" type="varchar(255)"/>
+            <column name="jobType" type="varchar(255)"/>
+            <column name="jobStatus" type="varchar(255)"/>
+            <column name="jobDescription" type="varchar(255)"/>
+            <column name="groupId" type="bigint"/>
+            <column name="kcReferenceId" type="varchar(255)"/>
+            <column name="assignedManagerId" type="varchar(255)"/>
         </createTable>
     </changeSet>
+
 
     <!-- Changeset for LeaveTracker -->
     <changeSet id="6" author="hrms">
@@ -240,35 +241,41 @@
                                  referencedColumnNames="attribute_id"
                                  onDelete="CASCADE"/>
     </changeSet>
-    <changeSet id="12" author="hrms">
-        <createTable tableName="action_items">
-            <column name="action_item_id" type="BIGINT"  autoIncrement="true">
-                <constraints primaryKey="true" />
-            </column>
-            <column name="policy_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="title" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="TEXT"/>
-            <column name="status" type="VARCHAR(50)" defaultValue="PENDING">
-                <constraints nullable="false"/>
-            </column>
-            <column name="due_date" type="DATE"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP"/>
-        </createTable>
 
-        <addForeignKeyConstraint baseTableName="action_items"
-                                 baseColumnNames="policy_id"
-                                 constraintName="fk_action_items_policy"
-                                 referencedTableName="policies"
-                                 referencedColumnNames="policy_id"
-                                 onDelete="CASCADE"/>
+
+
+
+    <changeSet id="12" author="your-name">
+        <createTable tableName="action_items">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="description" type="varchar(255)"/>
+            <column name="remarks" type="varchar(255)"/>
+            <column name="seen" type="boolean"/>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initiator_user_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assignee_user_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reference_id" type="bigint"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
     </changeSet>
+
+
+
     <changeSet id="13" author="hrms">
         <createTable tableName="notice">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -297,6 +304,56 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="15" author="yourname">
+        <createTable tableName="WFHTracker">
+            <!-- Primary Key: auto-generated identity column -->
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- Foreign Key to Employee. Note: The referenced Employee table's PK column is "employeeTd" -->
+            <column name="employee_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Date columns for tracking -->
+            <column name="startDate" type="date"/>
+            <column name="endDate" type="date"/>
+
+            <!-- Additional string columns -->
+            <column name="wfhCreditOption" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="reason" type="varchar(255)"/>
+
+            <!-- Audit columns -->
+            <column name="createdDate" type="date"/>
+            <column name="updatedDate" type="date"/>
+        </createTable>
+
+        <!-- Foreign Key Constraint linking back to the Employee table -->
+        <addForeignKeyConstraint
+                baseTableName="WFHTracker"
+                baseColumnNames="employee_id"
+                referencedTableName="employee"
+                referencedColumnNames="employee_id"
+                constraintName="fk_wfhtracker_employee"/>
+    </changeSet>
+
+    <changeSet id="16" author="yourname">
+        <createTable tableName="leave_types">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="totalDays" type="int"/>
+            <column name="carryForward" type="boolean"/>
+            <column name="disbursalFrequency" type="varchar(255)"/>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+
 
 </databaseChangeLog>
 
