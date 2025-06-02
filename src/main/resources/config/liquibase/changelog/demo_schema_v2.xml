@@ -109,7 +109,7 @@
             <column name="state" type="varchar(255)"/>
             <column name="zip_code" type="varchar(255)"/>
             <column name="country" type="varchar(255)"/>
-            <column name="jobTitle" type="varchar(255)"/>
+            <column name="job_title" type="varchar(255)"/>
             <column name="project" type="varchar(255)"/>
             <column name="job_type" type="varchar(255)"/>
             <column name="job_status" type="varchar(255)"/>
