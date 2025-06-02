@@ -232,6 +232,16 @@
     </changeSet>
 
 
+    <changeSet id="9" author="you">
+        <insert tableName="role_group_mapping">
+            <column name="role" value="group"/>
+            <column name="module" value="groups"/>
+            <column name="description" value="Assigned user can manage access and to various functionalities"/>
+        </insert>
+
+    </changeSet>
+
+
 
 
 </databaseChangeLog>

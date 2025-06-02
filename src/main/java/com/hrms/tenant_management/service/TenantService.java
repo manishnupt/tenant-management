@@ -189,7 +189,7 @@ public class TenantService {
         Tenant tenant=validateAndConvertTenantRequest(tenantUiRequest);
         log.info("Request validated,stared the process to save tenant");
         Tenant savedTenant = saveTenant(tenant);
-        //tenantUiRequest.getModules().add("GROUP_ROLES_MGMT");
+        tenantUiRequest.getModules().add("group");
         List<String> roles =getAllApplicableRoles(tenantUiRequest.getModules());
         log.info("got roles :{}",roles);
         log.info("Tenant saved,stared the process of keycloak onboarding");
