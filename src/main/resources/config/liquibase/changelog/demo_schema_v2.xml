@@ -306,7 +306,7 @@
     </changeSet>
 
     <changeSet id="15" author="yourname">
-        <createTable tableName="WFHTracker">
+        <createTable tableName="WfhTracker">
             <!-- Primary Key: auto-generated identity column -->
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
