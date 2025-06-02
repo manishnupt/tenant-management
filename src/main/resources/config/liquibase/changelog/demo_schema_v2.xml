@@ -107,16 +107,16 @@
             <column name="address" type="varchar(255)"/>
             <column name="city" type="varchar(255)"/>
             <column name="state" type="varchar(255)"/>
-            <column name="zipCode" type="varchar(255)"/>
+            <column name="zip_code" type="varchar(255)"/>
             <column name="country" type="varchar(255)"/>
             <column name="jobTitle" type="varchar(255)"/>
             <column name="project" type="varchar(255)"/>
-            <column name="jobType" type="varchar(255)"/>
-            <column name="jobStatus" type="varchar(255)"/>
-            <column name="jobDescription" type="varchar(255)"/>
-            <column name="groupId" type="bigint"/>
-            <column name="kcReferenceId" type="varchar(255)"/>
-            <column name="assignedManagerId" type="varchar(255)"/>
+            <column name="job_type" type="varchar(255)"/>
+            <column name="job_status" type="varchar(255)"/>
+            <column name="job_description" type="varchar(255)"/>
+            <column name="group_id" type="bigint"/>
+            <column name="kc_reference_id" type="varchar(255)"/>
+            <column name="assigned_manager_id" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -318,17 +318,17 @@
             </column>
 
             <!-- Date columns for tracking -->
-            <column name="startDate" type="date"/>
-            <column name="endDate" type="date"/>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
 
             <!-- Additional string columns -->
-            <column name="wfhCreditOption" type="varchar(255)"/>
+            <column name="wfh_credit_option" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
             <column name="reason" type="varchar(255)"/>
 
             <!-- Audit columns -->
-            <column name="createdDate" type="date"/>
-            <column name="updatedDate" type="date"/>
+            <column name="created_date" type="date"/>
+            <column name="updated_date" type="date"/>
         </createTable>
 
         <!-- Foreign Key Constraint linking back to the Employee table -->
@@ -346,9 +346,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="totalDays" type="int"/>
-            <column name="carryForward" type="boolean"/>
-            <column name="disbursalFrequency" type="varchar(255)"/>
+            <column name="total_days" type="int"/>
+            <column name="carry_forward" type="boolean"/>
+            <column name="disbursal_frequency" type="varchar(255)"/>
             <column name="description" type="varchar(255)"/>
         </createTable>
     </changeSet>
