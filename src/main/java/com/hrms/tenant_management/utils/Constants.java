@@ -23,7 +23,7 @@ public class Constants {
     public static final String BASE_URL_EXTRACT_REGEX="jdbc:postgresql://[^/]+:\\d+";
 
     public static final String INSERT_USER_QUERY = "INSERT INTO public.employee (" +
-            " employee_id,name, username, email,group_id) " +
+            " employee_id,name, username, email,groupId) " +
             "VALUES (?, ?, ?, ?, ?);";
 
     public static final String INSERT_ROLE_QUERY = "INSERT INTO public.role (" +
