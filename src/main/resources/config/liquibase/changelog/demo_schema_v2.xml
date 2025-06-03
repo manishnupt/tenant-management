@@ -333,7 +333,7 @@
 
         <!-- Foreign Key Constraint linking back to the Employee table -->
         <addForeignKeyConstraint
-                baseTableName="WFHTracker"
+                baseTableName="WfhTracker"
                 baseColumnNames="employee_id"
                 referencedTableName="employee"
                 referencedColumnNames="employee_id"
