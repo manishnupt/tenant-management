@@ -306,7 +306,7 @@
     </changeSet>
 
     <changeSet id="15" author="yourname">
-        <createTable tableName="WfhTracker">
+        <createTable tableName="wfh_tracker">
             <!-- Primary Key: auto-generated identity column -->
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -333,7 +333,7 @@
 
         <!-- Foreign Key Constraint linking back to the Employee table -->
         <addForeignKeyConstraint
-                baseTableName="WfhTracker"
+                baseTableName="wfh_tracker"
                 baseColumnNames="employee_id"
                 referencedTableName="employee"
                 referencedColumnNames="employee_id"
