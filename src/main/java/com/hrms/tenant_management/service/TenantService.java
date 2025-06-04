@@ -280,7 +280,7 @@ public class TenantService {
 
 
     private Long insertRoleGroup(Connection tenantConnection, String group, String groupDescription,String kcGroupId)throws SQLException  {
-        String insertQuery = "INSERT INTO role_group (name, description,kc_group_id_ref creation_date, last_modification_date) VALUES (?, ?, ?, ?) RETURNING id";
+        String insertQuery = "INSERT INTO role_group (name, description,kc_group_id_ref creation_date, last_modification_date) VALUES (?, ?, ?, ?,?) RETURNING id";
 
         try (PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, group);
