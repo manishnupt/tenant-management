@@ -193,20 +193,20 @@ public class TenantService {
         List<String> roles =getAllApplicableRoles(tenantUiRequest.getModules());
         log.info("got roles :{}",roles);
         log.info("Tenant saved,stared the process of keycloak onboarding");
-        String userId=handleKeycloakIntegration(savedTenant,roles);
-        log.info("Tenant onboarding in keycloak complete, onboarded user with id :{}. Starting to setup tenant db",userId);
+        Map<String,String> responseData=handleKeycloakIntegration(savedTenant,roles);
+        log.info("Tenant onboarding in keycloak complete, onboarded user with id :{}. Starting to setup tenant db",responseData.get("USER_ID"));
         Map<String, String> tenantDatabase = createTenantDatabase(savedTenant.getName());
         log.info("tenant db setup complete saving db details to meta");
         saveTenantDatabaseDetails(tenantDatabase,savedTenant.getId(),savedTenant.getName());
         log.info("process started to onboard user to tenant's db");
         persistRoleToTenantTable(tenantUiRequest.getModules(),tenantDatabase,tenantUiRequest);
-        Long groupId = persistGroupAndAssignRolesToTenantTable(tenantDatabase, "SUPER_ADMIN", "group containing all the features your organisation has opted for");
-        persistUserToTenantDb(userId,tenantDatabase,tenantUiRequest,groupId);
+        Long groupId = persistGroupAndAssignRolesToTenantTable(tenantDatabase, "SUPER_ADMIN", "group containing all the features your organisation has opted for",responseData.get("KC_GROUP_ID"));
+        persistUserToTenantDb(responseData.get("USER_ID"),tenantDatabase,tenantUiRequest,groupId);
         log.info("tenant onboarded successfully");
         return TenantOnboardingHelper.convertToTenantUiResponse(savedTenant);
     }
 
-    private Long persistGroupAndAssignRolesToTenantTable(Map<String, String> tenantDatabase, String group,String groupDescription) {
+    private Long persistGroupAndAssignRolesToTenantTable(Map<String, String> tenantDatabase, String group,String groupDescription,String kcGroupId) {
         try {
             Class.forName("org.postgresql.Driver");
             try (Connection tenantConnection = DriverManager.getConnection(
@@ -219,7 +219,7 @@ public class TenantService {
 
                 try {
                     // 1. Insert the role group
-                    Long roleGroupId = insertRoleGroup(tenantConnection, group, groupDescription);
+                    Long roleGroupId = insertRoleGroup(tenantConnection, group, groupDescription,kcGroupId);
 
                     // 2. Get all roles from the role table
                     List<Long> roleIds = getAllRoleIds(tenantConnection);
@@ -279,15 +279,16 @@ public class TenantService {
 
 
 
-    private Long insertRoleGroup(Connection tenantConnection, String group, String groupDescription)throws SQLException  {
-        String insertQuery = "INSERT INTO role_group (name, description, creation_date, last_modification_date) VALUES (?, ?, ?, ?) RETURNING id";
+    private Long insertRoleGroup(Connection tenantConnection, String group, String groupDescription,String kcGroupId)throws SQLException  {
+        String insertQuery = "INSERT INTO role_group (name, description,kc_group_id_ref creation_date, last_modification_date) VALUES (?, ?, ?, ?) RETURNING id";
 
         try (PreparedStatement preparedStatement = tenantConnection.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, group);
             preparedStatement.setString(2, groupDescription);
+            preparedStatement.setString(3,kcGroupId);
             LocalDateTime now = LocalDateTime.now();
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(now));
             preparedStatement.setTimestamp(4, Timestamp.valueOf(now));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(now));
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -345,7 +346,8 @@ public class TenantService {
         return TenantOnboardingHelper.convertRequestToTenantEntity(tenantUiRequest);
     }
 
-    private String handleKeycloakIntegration(Tenant savedTenant, List<String> roles) {
+    private Map<String,String> handleKeycloakIntegration(Tenant savedTenant, List<String> roles) {
+        Map<String,String> responseData = new HashMap<String,String>();
         log.info("getting master realm details from db");
         KeycloakClientConfig clientByRealm = keycloakServicev2.getClientByRealm("master");
         log.info("getting admin token for master realm");
@@ -368,7 +370,9 @@ public class TenantService {
         keycloakServicev2.grantAdminAccess(newToken,userId,savedTenant.getName(),groupId);
         log.info("saving client details in meta db");
         saveClientDetails(savedTenant,clientForRealm);
-        return userId;
+        responseData.put("USER_ID",userId);
+        responseData.put("KC_GROUP_ID",groupId);
+        return responseData;
     }
 
     private void saveClientDetails(Tenant savedTenant, Map<String, String> clientForRealm) {
