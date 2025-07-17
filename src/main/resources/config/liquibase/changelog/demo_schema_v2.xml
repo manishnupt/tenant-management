@@ -352,6 +352,57 @@
             <column name="description" type="varchar(255)"/>
         </createTable>
     </changeSet>
+    <changeSet id="17" author="yourname">
+        <createTable tableName="employee_leave_balance">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="employee_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_balance" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="carry_forward_days" type="decimal(10,2)" />
+            <column name="remaining_days" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean" />
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="18" author="yourname">
+        <createTable tableName="leave_transactions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="employee_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="days" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 
 
 
