@@ -1,0 +1,9 @@
+@Library(value="ci@master", changelog=false) _
+
+helm_generic([
+    directoryPath: "charts/meta",
+    imageName: "mynx-use1-pp-meta-ecr",
+    app: "meta",
+    prefix: "mynx-use1",
+    image_tag_helm_path: ".Deployment.containers.meta.image.tag"
+])
