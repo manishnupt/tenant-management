@@ -1,0 +1,47 @@
+global: {}
+fullnameOverride: ""
+ServiceAccount:
+  automountServiceAccountToken: true
+  name: tenant-mgmt
+Deployment:
+  name: tenant-mgmt
+  annotations:
+    instrumentation.opentelemetry.io/inject-java: "trace/default"
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  containers:
+    tenant-mgmt:
+      image:
+        registry: "742428948447.dkr.ecr.ap-south-1.amazonaws.com"
+        repository: "mynx-use1-hrms-stage-tenant-ecr"
+        tag: "v1"
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8081
+          protocol: TCP
+          name: http
+      resources:
+        limits:
+          cpu: "2"
+          memory: "4Gi"
+        requests:
+          cpu: "1"
+          memory: "2Gi"
+      env:
+        DB_URL: "jdbc:postgresql://mynx-use1-hrms-stage.czgkcums6o0w.ap-south-1.rds.amazonaws.com:5432/postgres"
+        DB_USERNAME: "postgres"
+        DB_PASSWORD: "hCUe:K[o9U#uIl56]6:QJB6TWfjw"
+        SPRING_PROFILES_ACTIVE: "pp"
+        AUTH_SERVICE_BASE_URL: "http://iam-service-mgmt.iam-service-mgmt.svc.cluster.local:80"
+        ADMIN_SERVICE_BASE_URL: "http://cmp-mgmt.cmp-mgmt.svc.cluster.local:80"
+Service:
+  tenant-mgmt:
+    name: tenant-mgmt
+    ports:
+      - port: 80
+        targetPort: 8081
+    sessionAffinity: None
