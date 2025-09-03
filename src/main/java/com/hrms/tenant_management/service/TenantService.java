@@ -184,6 +184,7 @@ public class TenantService {
         return tenantRepo.findAll();
     }
 
+    @Transactional
     public TenantUiResponse createTenant(TenantOnboardingUiRequest tenantUiRequest) {
         log.info("stared the process to onboard tenant");
         Tenant tenant=validateAndConvertTenantRequest(tenantUiRequest);

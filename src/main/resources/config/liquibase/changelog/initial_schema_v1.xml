@@ -241,6 +241,20 @@
 
     </changeSet>
 
+    <changeSet id="10" author="you">
+        <insert tableName="role_group_mapping">
+            <column name="role" value="POLICY_MANAGEMENT"/>
+            <column name="module" value="EMPLOYEE_MGMT"/>
+            <column name="description" value="Assigned user will be able to change company policy"/>
+        </insert>
+        <insert tableName="role_group_mapping">
+            <column name="role" value="LEAVES_DISBURSAL_MANAGE"/>
+            <column name="module" value="COMPLIANCE_SECURITY"/>
+            <column name="description" value="user can disburse leave and their rules"/>
+        </insert>
+
+    </changeSet>
+
 
 
 
