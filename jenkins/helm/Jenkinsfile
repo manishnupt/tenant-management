@@ -1,9 +1,9 @@
 @Library(value="ci@master", changelog=false) _
 
-helm_generic([
-    directoryPath: "charts/meta",
-    imageName: "mynx-use1-pp-meta-ecr",
-    app: "meta",
+helm_hrms_generic([
+    directoryPath: "charts/tenant-mgmt",
+    imageName: "mynx-use1-hrms-stage-tenant-ecr",
+    app: "tenant-mgmt",
     prefix: "mynx-use1",
-    image_tag_helm_path: ".Deployment.containers.meta.image.tag"
+    image_tag_helm_path: ".Deployment.containers.tenant-mgmt.image.tag"
 ])
